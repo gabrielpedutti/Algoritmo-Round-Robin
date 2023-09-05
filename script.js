@@ -50,7 +50,19 @@ class Scheduler {
             `
         });
     }
-    
+
+    scaling() {
+        if(pcb.length > 0) {
+            if(pcb[0].burst > 0) {
+                pcb[0].status = statusProcess.ready;
+                pcb[0].executionTime += this.quantum;
+                for (let i = 1; i < array.length; i++) {
+                    pcb[i].waitTime += this.quantum;                    
+                }
+                globalTime += this.quantum;
+            }
+        }
+    }
 }
 
 let scheduler = new Scheduler(6, pcb);
