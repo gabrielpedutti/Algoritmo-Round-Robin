@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const btnEmail = document.querySelector('#btnEmail')
     const tableBody = document.querySelector('tbody')
     const tbodyProcessFinished = document.querySelector('#tbodyProcessFinished')
+    const gTime = document.querySelector('h2 span')
     
     //remainingTime = Tempo restante até o término do processo
     //Burst = Tempo total do processo (fixo)
@@ -25,6 +26,10 @@ document.addEventListener("DOMContentLoaded", function () {
       };
     
     let globalTime = 0;
+
+    const updateGlobalTime = () => {
+        gTime.innerText = globalTime;
+    }
     
     class Process {
         constructor(name, burst, arrivalTime, id) {
@@ -90,7 +95,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         processControlBlock[i].waitTime += this.quantum;                    
                     }
                     if (processControlBlock[0].remainingTime == 0) {
-                        processControlBlock[0].status = statusProcess.finished;
+                        processControlBlock[0].status = statusProcess.finished;  
+                        this.updateTable()
+                        finishedProcesses.push(processControlBlock.shift());   
                     } else {
                         processControlBlock[0].status = statusProcess.ready;
                     }
@@ -108,8 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         processControlBlock[0].status = statusProcess.finished;
                     
                         this.updateTable()
-                        finishedProcesses.push(processControlBlock[0]);
-                        processControlBlock.shift()
+                        finishedProcesses.push(processControlBlock.shift());   
                 }
             }
         }
@@ -126,6 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
             scheduler.scaling();
             if (i < 99) {
                 executaScheduler(i + 1);
+                updateGlobalTime();
             }
         }, 1000);
     }
