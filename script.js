@@ -19,11 +19,9 @@ document.addEventListener("DOMContentLoaded", function () {
     finishedProcesses = [];
     
     const rotate = (arr) => {
-        let a = [arr[arr.length - 1]];
-        for (let i = 0; i < arr.length - 1; i++) {
-          a.push(arr[i]);
-        }
-        return a;
+        let aux = arr.shift();
+        arr.push(aux);
+        return arr;
       };
     
     let globalTime = 0;
@@ -122,8 +120,16 @@ document.addEventListener("DOMContentLoaded", function () {
     let scheduler = new Scheduler(6, processControlBlock);
     
     scheduler.updateTable()
-    for (let i = 0; i < 100; i++) {
-        setTimeout(scheduler.scaling(), 5000);
+
+    function executaScheduler(i) {
+        setTimeout(function () {
+            scheduler.scaling();
+            if (i < 99) {
+                executaScheduler(i + 1);
+            }
+        }, 1000);
     }
+
+    executaScheduler(0);
     
-    })
+})
