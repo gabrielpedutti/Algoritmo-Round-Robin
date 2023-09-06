@@ -18,12 +18,28 @@
     <table>
         <thead>
             <tr>
-                <th>Nome</th>
-                <th>Duração</th>
-                <th>Tempo Atual</th>
+                <th>Nome do Processo</th>
+                <th>Duração (Burst)</th>
+                <th>Tempo Atual de Execução</th>
+                <th>Tempo Restante</th>
+                <th>Tempo de Espera</th>
             </tr>
         </thead>
         <tbody>
+        </tbody>
+    </table>
+    <h2>Processos Finalizados</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome do Processo</th>
+                <th>Duração (Burst)</th>
+                <th>Tempo Atual de Execução</th>
+                <th>Tempo Restante</th>
+                <th>Tempo de Espera</th>
+            </tr>
+        </thead>
+        <tbody id="tbodyProcessFinished">
         </tbody>
     </table>
     <script src="script.js"></script>
