@@ -127,6 +127,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     finishedProcesses.push(processControlBlock.shift());   
                 }
             }
+            this.updateTable()
+            this.updateTableFinishedProcess()
         }
     }
     
@@ -160,21 +162,27 @@ document.addEventListener("DOMContentLoaded", function () {
     data: {
         labels: allProcessesNames,
         datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: [
-            'rgba(255, 26, 104, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-        ],
-        barPercentage: 0.2,//espessura da barra
+            label: '# of Votes',
+            data: [
+                ['2022-02-01', '2022-02-03'],
+                ['2022-02-03', '2022-02-06'],
+                ['2022-02-06', '2022-02-08'],
+                ['2022-02-08', '2022-02-13'],
+            ],
+            backgroundColor: [
+                'rgba(255, 26, 104, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(5, 161, 65, 1)',
+                'rgba(153, 102, 255, 1)',
+            ],
+            barPercentage: 0.2,//espessura da barra
         }]
     },
     options: {
         indexAxis: 'y',
         scales: {
         x: {
+            min: '2022-02-01',
             type: 'time',
             time: {
                 unit: 'day'

@@ -1,12 +1,107 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+header {
+    background-color: #4bc0c0;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+nav {
+    height: 60px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-inline: 100px;
+    margin-bottom: 30px;
+}
+
+button {
+    border: none;
+    padding: 10px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 3px #0000003b;
+    transition: 0.3s;
+    color: #fff;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+#btnPrinter {
+    background-color: #ff1a68;
+}
+
+#btnPhoto {
+    background-color: #ffce56;
+}
+
+#btnGithub {
+    background-color: rgb(5, 161, 65);
+}
+
+#btnEmail {
+    background-color: #9966ff;
+}
+
+button i {
+    font-size: 22px;
+}
+
+button:hover {
+    opacity: 70%;
+}
+
+h1 {
+    font-weight: 300;
+    color: #fff;
+}
+
+header h2 {
+    color: #fff;
+}
+
 body {
-    height: 100vh;
+    /* height: 100vh; */
+    background-color: #fff;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 100px;
+}
+
+.wrapper {
+    display: flex;
+    min-height: 200px;
+    gap: 25px;
+}
+
+.boxFinishedProcess {
+
+}
+
+thead {
+    background-color: #4bc0c0;
+}
+
+tr:nth-child(odd) {
+    background-color: #4bc0c044;
 }
 
 td {
     text-align: center;
+}
+
+#grafico {
+    width: 900px;
+    height: 500px;
+    /* margin-bottom: 20px; */
 }

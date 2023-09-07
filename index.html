@@ -5,46 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-    <div>
-        <h1>Robin Hood</h1>
-        <button id="btnPrinter">Impressora</button>
-        <button id="btnPhoto">Foto</button>
-        <button id="btnGithub">Github</button>
-        <button id="btnEmail">E-mail</button>
-        <script src="script.js"></script>
+    <header>
+        <h1><i class='bx bxs-color'></i> Robin Hood</h1>
+        <h2>Tempo Global: <span>0</span></h2>
+    </header>
+    <nav>
+        <button id="btnPrinter"><i class='bx bx-printer'></i> Impressora</button>
+        <button id="btnPhoto"><i class='bx bx-photo-album'></i> Foto</button>
+        <button id="btnGithub"><i class='bx bxl-github' ></i> Github</button>
+        <button id="btnEmail"><i class='bx bx-envelope' ></i> E-mail</button>
+    </nav>
+    <div class="wrapper">
+        <div class="boxProcesses">
+            <h2>Processos em Andamento</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome do Processo</th>
+                        <th>Duração (Burst)</th>
+                        <th>Tempo Atual de Execução</th>
+                        <th>Tempo Restante</th>
+                        <th>Tempo de Espera</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="boxFinishedProcess">
+            <h2>Processos Finalizados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome do Processo</th>
+                        <th>Duração (Burst)</th>
+                        <th>Tempo Atual de Execução</th>
+                        <th>Tempo Restante</th>
+                        <th>Tempo de Espera</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyProcessFinished">
+                </tbody>
+            </table>
+        </div>
     </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Nome do Processo</th>
-                <th>Duração (Burst)</th>
-                <th>Tempo Atual de Execução</th>
-                <th>Tempo Restante</th>
-                <th>Tempo de Espera</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <h2>Global time: <span>0</span></h2>
-    <h2>Processos Finalizados</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Nome do Processo</th>
-                <th>Duração (Burst)</th>
-                <th>Tempo Atual de Execução</th>
-                <th>Tempo Restante</th>
-                <th>Tempo de Espera</th>
-            </tr>
-        </thead>
-        <tbody id="tbodyProcessFinished">
-        </tbody>
-    </table>
 
-    <div>
+    <div id="grafico">
         <canvas id="myChart"></canvas>
     </div>
       
