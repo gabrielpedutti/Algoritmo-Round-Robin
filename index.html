@@ -15,49 +15,52 @@
         <h1><i class='bx bxs-color'></i> Robin Hood</h1>
         <h2>Tempo Global: <span>0</span></h2>
     </header>
-    <nav>
-        <button id="btnPrinter"><i class='bx bx-printer'></i> Impressora</button>
-        <button id="btnPhoto"><i class='bx bx-photo-album'></i> Foto</button>
-        <button id="btnGithub"><i class='bx bxl-github' ></i> Github</button>
-        <button id="btnEmail"><i class='bx bx-envelope' ></i> E-mail</button>
-    </nav>
-    <div class="wrapper">
-        <div class="boxProcesses">
-            <h2>Processos em Andamento</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nome do Processo</th>
-                        <th>Duração (Burst)</th>
-                        <th>Tempo Atual de Execução</th>
-                        <th>Tempo Restante</th>
-                        <th>Tempo de Espera</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+    <div class="content">
+        <nav>
+            <button id="btnPrinter"><i class='bx bx-printer'></i> Impressora</button>
+            <button id="btnPhoto"><i class='bx bx-photo-album'></i> Foto</button>
+            <button id="btnGithub"><i class='bx bxl-github' ></i> Github</button>
+            <button id="btnEmail"><i class='bx bx-envelope' ></i> E-mail</button>
+        </nav>
+        <div class="box-wrapper">
+            <div class="wrapper">
+                <div class="boxProcesses">
+                    <h2>Processos em Andamento</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome do Processo</th>
+                                <th>Duração (Burst)</th>
+                                <th>Tempo Atual de Execução</th>
+                                <th>Tempo Restante</th>
+                                <th>Tempo de Espera</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="boxFinishedProcess">
+                    <h2>Processos Finalizados</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome do Processo</th>
+                                <th>Duração (Burst)</th>
+                                <th>Tempo Atual de Execução</th>
+                                <th>Tempo Restante</th>
+                                <th>Tempo de Espera</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyProcessFinished">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="grafico">
+                <canvas id="myChart"></canvas>
+            </div>
         </div>
-        <div class="boxFinishedProcess">
-            <h2>Processos Finalizados</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nome do Processo</th>
-                        <th>Duração (Burst)</th>
-                        <th>Tempo Atual de Execução</th>
-                        <th>Tempo Restante</th>
-                        <th>Tempo de Espera</th>
-                    </tr>
-                </thead>
-                <tbody id="tbodyProcessFinished">
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div id="grafico">
-        <canvas id="myChart"></canvas>
     </div>
       
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

@@ -149,6 +149,26 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     executaScheduler(0);
+    
+    btnPrinter.addEventListener("click", () => {
+        processControlBlock.push(new Process("Printer", 80 , 0, 0));
+        this.updateTable()
+    })
+
+    btnPhoto.addEventListener("click", () => {
+        processControlBlock.push(new Process("Photo", 30 , 0, 0));
+        this.updateTable()
+    })
+
+    btnGithub.addEventListener("click", () => {
+        processControlBlock.push(new Process("Github", 25 , 0, 0));
+        this.updateTable()
+    })
+
+    btnEmail.addEventListener("click", () => {
+        processControlBlock.push(new Process("E-mail", 48 , 0, 0));
+        this.updateTable()
+    })
 
     // for (let i = 0; i < 100; i++) {
     //     setTimeout(scheduler.scaling(), 5000);
