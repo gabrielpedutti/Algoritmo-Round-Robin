@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let aux = arr.shift();
         arr.push(aux);
         return arr;
-      };
+    };
     
     let globalTime = 0;
 
@@ -49,7 +49,11 @@ document.addEventListener("DOMContentLoaded", function () {
     let processSecurity = new Process("Security", 15, 2, 2);
     let processRegistry = new Process("Registry", 18, 3, 3);
     
-    let processControlBlock = [processSystem, processHost, processSecurity, processRegistry];
+    let processControlBlock = [processSecurity, processHost, processSystem, processRegistry];
+    let allProcessesNames = [];
+    processControlBlock.forEach(process => {
+        allProcessesNames.push(process.name);
+    });
     
     class Scheduler {
         constructor(quantum, processControlBlock) {
@@ -70,7 +74,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     </tr>
                 `
             });
-    
+        }
+
+        updateTableFinishedProcess() {
             tbodyProcessFinished.innerHTML = "";
             finishedProcesses.forEach(process => {
                 tbodyProcessFinished.innerHTML += `
@@ -97,12 +103,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (processControlBlock[0].remainingTime == 0) {
                         processControlBlock[0].status = statusProcess.finished;  
                         this.updateTable()
+                        this.updateTableFinishedProcess()
                         finishedProcesses.push(processControlBlock.shift());   
                     } else {
                         processControlBlock[0].status = statusProcess.ready;
                     }
                     globalTime += this.quantum;
                     this.updateTable()
+                    this.updateTableFinishedProcess()
                     processControlBlock = rotate(processControlBlock)
                 } else {
                     globalTime += processControlBlock[0].remainingTime;
@@ -112,10 +120,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     for (let i = 1; i < processControlBlock.length; i++) {
                         processControlBlock[i].waitTime += this.quantum;                    
                     }
-                        processControlBlock[0].status = statusProcess.finished;
-                    
-                        this.updateTable()
-                        finishedProcesses.push(processControlBlock.shift());   
+                    processControlBlock[0].status = statusProcess.finished;
+                
+                    this.updateTable()
+                    this.updateTableFinishedProcess()
+                    finishedProcesses.push(processControlBlock.shift());   
                 }
             }
         }
@@ -138,5 +147,43 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     executaScheduler(0);
-    
+
+    // for (let i = 0; i < 100; i++) {
+    //     setTimeout(scheduler.scaling(), 5000);
+    // }
+
+    // =============== Chart JS ==========================
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: allProcessesNames,
+        datasets: [{
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: [
+            'rgba(255, 26, 104, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+        ],
+        barPercentage: 0.2,//espessura da barra
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        scales: {
+        x: {
+            type: 'time',
+            time: {
+                unit: 'day'
+            }
+        },
+        y: {
+            beginAtZero: true
+        }
+        }
+    }
+    });
 })
