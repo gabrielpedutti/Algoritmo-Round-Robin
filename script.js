@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.querySelector('tbody')
     const tbodyProcessFinished = document.querySelector('#tbodyProcessFinished')
     const gTime = document.querySelector('h2 span')
+    const tableChartHead = document.querySelector('#tableChart thead')
+    const tableChartBody = document.querySelector('#tableChart tbody tr')
     
     //remainingTime = Tempo restante até o término do processo
     //Burst = Tempo total do processo (fixo)
@@ -41,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
             this.executionTime = 0;
             this.arrivalTime = arrivalTime;
             this.remainingTime = burst;
+            this.startIn = globalTime;
         }
     }
       
@@ -49,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let processSecurity = new Process("Security", 15, 2, 2);
     let processRegistry = new Process("Registry", 18, 3, 3);
     
-    let processControlBlock = [processSecurity, processHost, processSystem, processRegistry];
+    let processControlBlock = [processSystem, processHost, processSecurity, processRegistry];
     let allProcessesNames = [];
     processControlBlock.forEach(process => {
         allProcessesNames.push(process.name);
@@ -101,11 +104,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         processControlBlock[i].waitTime += this.quantum;                    
                     }
                     if (processControlBlock[0].remainingTime == 0) {
+                        updateChart()
                         processControlBlock[0].status = statusProcess.finished;  
                         this.updateTable()
                         this.updateTableFinishedProcess()
                         finishedProcesses.push(processControlBlock.shift());   
                     } else {
+                        updateChart()
                         processControlBlock[0].status = statusProcess.ready;
                     }
                     globalTime += this.quantum;
@@ -120,6 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     for (let i = 1; i < processControlBlock.length; i++) {
                         processControlBlock[i].waitTime += this.quantum;                    
                     }
+                    updateChart()
                     processControlBlock[0].status = statusProcess.finished;
                 
                     this.updateTable()
@@ -129,6 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             this.updateTable()
             this.updateTableFinishedProcess()
+            updateChart()
         }
     }
     
@@ -152,66 +159,102 @@ document.addEventListener("DOMContentLoaded", function () {
     
     btnPrinter.addEventListener("click", () => {
         processControlBlock.push(new Process("Printer", 80 , 0, 0));
-        this.updateTable()
+        this.updateTable
     })
 
     btnPhoto.addEventListener("click", () => {
         processControlBlock.push(new Process("Photo", 30 , 0, 0));
-        this.updateTable()
+        this.updateTable
     })
 
     btnGithub.addEventListener("click", () => {
         processControlBlock.push(new Process("Github", 25 , 0, 0));
-        this.updateTable()
+        this.updateTable
     })
 
     btnEmail.addEventListener("click", () => {
         processControlBlock.push(new Process("E-mail", 48 , 0, 0));
-        this.updateTable()
+        this.updateTable
     })
 
-    // for (let i = 0; i < 100; i++) {
-    //     setTimeout(scheduler.scaling(), 5000);
-    // }
+    // ===================================================
+
+    const ganttData = [
+        { tarefa: 'Tarefa 1', inicio: '2023-09-07', fim: '2023-09-10' },
+        { tarefa: 'Tarefa 2', inicio: '2023-09-08', fim: '2023-09-12' },
+        // Adicione mais tarefas conforme necessário
+    ];
+
+    let globalCounter = 0;
+
+    function updateChart() {
+        const ganttChart = document.querySelector('#gantt-chart tr');
+    
+        for (let i = 0; i < globalTime; i=i+6) {
+
+            if(globalCounter < i) {
+                const taskCell = document.createElement('th');
+                globalCounter = i
+                taskCell.textContent = i;
+                ganttChart.appendChild(taskCell);
+            }
+        };
+
+        processControlBlock.forEach(process => {
+            if(process.status != 'finished') {
+                if(process.status == 'running') {
+                    const processTrChart = document.getElementById(`${process.pID}`);
+                    const taskCell = document.createElement('td');
+                    taskCell.textContent = ' ';
+                    taskCell.style.backgroundColor = '#4bc0c0';
+                    processTrChart.appendChild(taskCell);
+                } else {
+                    const processTrChart = document.getElementById(`${process.pID}`);
+                    const taskCell = document.createElement('td');
+                    taskCell.textContent = ' ';
+                    taskCell.style.backgroundColor = '#4bc00';
+                    processTrChart.appendChild(taskCell);
+                }
+            }
+        })
+        
+    }
 
     // =============== Chart JS ==========================
-    const ctx = document.getElementById('myChart');
+    // const ctx = document.getElementById('myChart');
 
-    new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: allProcessesNames,
-        datasets: [{
-            label: '# of Votes',
-            data: [
-                ['2022-02-01', '2022-02-03'],
-                ['2022-02-03', '2022-02-06'],
-                ['2022-02-06', '2022-02-08'],
-                ['2022-02-08', '2022-02-13'],
-            ],
-            backgroundColor: [
-                'rgba(255, 26, 104, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(5, 161, 65, 1)',
-                'rgba(153, 102, 255, 1)',
-            ],
-            barPercentage: 0.2,//espessura da barra
-        }]
-    },
-    options: {
-        indexAxis: 'y',
-        scales: {
-        x: {
-            min: '2022-02-01',
-            type: 'time',
-            time: {
-                unit: 'day'
-            }
-        },
-        y: {
-            beginAtZero: true
-        }
-        }
-    }
-    });
+    // new Chart(ctx, {
+    //     type: 'bar',
+    //     data: {
+    //         labels: allProcessesNames,
+    //         datasets: [{
+    //             label: '# of Votes',
+    //             data: [
+    //                 [1, 5],
+    //                 [3, 6],
+    //                 [6, 8],
+    //                 [8, 13],
+    //             ],
+    //             backgroundColor: [
+    //                 'rgba(255, 26, 104, 1)',
+    //                 'rgba(255, 206, 86, 1)',
+    //                 'rgba(5, 161, 65, 1)',
+    //                 'rgba(153, 102, 255, 1)',
+    //             ],
+    //             barPercentage: 0.2,//espessura da barra
+    //         }]
+    //     },
+    //     options: {
+    //         indexAxis: 'y',
+    //         scales: {
+    //         x: {
+    //             min: 0,
+    //             type: 'linear',
+    //         },
+    //         y: {
+    //             beginAtZero: true
+    //         }
+    //         }
+    //     }
+    // });
 })
