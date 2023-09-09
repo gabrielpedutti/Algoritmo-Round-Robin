@@ -112,3 +112,13 @@ td {
     height: 500px;
     /* margin-bottom: 20px; */
 }
+
+#gantt-chart th {
+    min-width: 30px;
+}
+
+
+
+#gantt-chart th:first-child {
+    background-color: #fff;
+}
