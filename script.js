@@ -12,7 +12,17 @@ document.addEventListener("DOMContentLoaded", function () {
     //remainingTime = Tempo restante até o término do processo
     //Burst = Tempo total do processo (fixo)
     //ExecutionTime = Quanto tempo já executou
-    
+    function sleep(ms)
+    {
+        return(
+            new Promise(function(resolve, reject)
+            {
+                setTimeout(function() { resolve(); }, ms);
+            })
+        );
+    }
+
+
     const statusProcess = {
         ready: "ready",
         running: "running",
@@ -104,13 +114,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         processControlBlock[i].waitTime += this.quantum;                    
                     }
                     if (processControlBlock[0].remainingTime == 0) {
-                        updateChart()
+                        sleep(1000).then(updateChart())
                         processControlBlock[0].status = statusProcess.finished;  
                         this.updateTable()
                         this.updateTableFinishedProcess()
                         finishedProcesses.push(processControlBlock.shift());   
                     } else {
-                        updateChart()
+                        sleep(1000).then(updateChart())
                         processControlBlock[0].status = statusProcess.ready;
                     }
                     globalTime += this.quantum;
@@ -125,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     for (let i = 1; i < processControlBlock.length; i++) {
                         processControlBlock[i].waitTime += this.quantum;                    
                     }
-                    updateChart()
+                    sleep(1000).then(updateChart())
                     processControlBlock[0].status = statusProcess.finished;
                 
                     this.updateTable()
@@ -178,26 +188,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ===================================================
 
-    const ganttData = [
-        { tarefa: 'Tarefa 1', inicio: '2023-09-07', fim: '2023-09-10' },
-        { tarefa: 'Tarefa 2', inicio: '2023-09-08', fim: '2023-09-12' },
-        // Adicione mais tarefas conforme necessário
-    ];
-
-    let globalCounter = 0;
-
-    function updateChart() {
+    async function updateChart() {
         const ganttChart = document.querySelector('#gantt-chart tr');
-    
-        for (let i = 0; i < globalTime; i=i+6) {
-
-            if(globalCounter < i) {
-                const taskCell = document.createElement('th');
-                globalCounter = i
-                taskCell.textContent = i;
-                ganttChart.appendChild(taskCell);
-            }
-        };
+        const taskCell = document.createElement('th');
+        taskCell.textContent = globalTime;
+        ganttChart.appendChild(taskCell);
 
         processControlBlock.forEach(process => {
             if(process.status != 'finished') {
@@ -218,42 +213,4 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         
     }
-
-    // =============== Chart JS ==========================
-    // const ctx = document.getElementById('myChart');
-
-    // new Chart(ctx, {
-    //     type: 'bar',
-    //     data: {
-    //         labels: allProcessesNames,
-    //         datasets: [{
-    //             label: '# of Votes',
-    //             data: [
-    //                 [1, 5],
-    //                 [3, 6],
-    //                 [6, 8],
-    //                 [8, 13],
-    //             ],
-    //             backgroundColor: [
-    //                 'rgba(255, 26, 104, 1)',
-    //                 'rgba(255, 206, 86, 1)',
-    //                 'rgba(5, 161, 65, 1)',
-    //                 'rgba(153, 102, 255, 1)',
-    //             ],
-    //             barPercentage: 0.2,//espessura da barra
-    //         }]
-    //     },
-    //     options: {
-    //         indexAxis: 'y',
-    //         scales: {
-    //         x: {
-    //             min: 0,
-    //             type: 'linear',
-    //         },
-    //         y: {
-    //             beginAtZero: true
-    //         }
-    //         }
-    //     }
-    // });
 })
