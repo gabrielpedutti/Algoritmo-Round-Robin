@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
       
     let processSystem = new Process("System", 100 , 0, 0);
     let processHost = new Process("Host", 10, 1, 1);
-    let processSecurity = new Process("Security", 15, 2, 2);
+    let processSecurity = new Process("Security", 13, 2, 2);
     let processRegistry = new Process("Registry", 18, 3, 3);
     
     let processControlBlock = [processSystem, processHost, processSecurity, processRegistry];
@@ -109,12 +109,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (processControlBlock[0].remainingTime == 0) {
                         
                         processControlBlock[0].status = statusProcess.finished;  
-                        updateChart(processControlBlock)
+                        updateChart(processControlBlock, this.quantum)
                         this.updateTable()
                         this.updateTableFinishedProcess()
                         finishedProcesses.push(processControlBlock.shift());   
                     } else {
-                        updateChart(processControlBlock)
+                        updateChart(processControlBlock, this.quantum)
                         processControlBlock[0].status = statusProcess.ready;
                         this.updateTable()
                         this.updateTableFinishedProcess()
@@ -124,6 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     
                 } else {
                     globalTime += processControlBlock[0].remainingTime;
+                    let aux = processControlBlock[0].remainingTime
                     processControlBlock[0].status = statusProcess.running;
                     processControlBlock[0].executionTime += processControlBlock[0].remainingTime;
                     processControlBlock[0].remainingTime = 0;
@@ -131,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         processControlBlock[i].waitTime += this.quantum;                    
                     }
 
-                    updateChart(processControlBlock)
+                    updateChart(processControlBlock, aux)
                     processControlBlock[0].status = statusProcess.finished;
                 
                     this.updateTable()
@@ -184,10 +185,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ===================================================
 
-    function updateChart(processControlBlock) {
+    function updateChart(processControlBlock, size) {
         const ganttChart = document.querySelector('#gantt-chart tr');
         const taskCell = document.createElement('th');
         taskCell.textContent = globalTime;
+        taskCell.setAttribute('width', size*6) // ajuste o número mágico para aumentar ou diminuir a coluna
         ganttChart.appendChild(taskCell);
         
         const processosChart = document.querySelector('#gantt-chart tbody')
