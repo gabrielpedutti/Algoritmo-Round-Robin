@@ -99,7 +99,7 @@ thead {
     background-color: #4bc0c0;
 }
 
-tr:nth-child(odd) {
+tr {
     background-color: #4bc0c044;
 }
 

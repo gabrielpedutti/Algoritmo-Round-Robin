@@ -50,7 +50,6 @@ document.addEventListener("DOMContentLoaded", function () {
       
     let processSystem = new Process("System", 100 , 0, 0);
     let processHost = new Process("Host", 10, 1, 1);
-    let processHost2 = new Process("Host2", 10, 1, 1);
     let processSecurity = new Process("Security", 15, 2, 2);
     let processRegistry = new Process("Registry", 18, 3, 3);
     
@@ -110,18 +109,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (processControlBlock[0].remainingTime == 0) {
                         
                         processControlBlock[0].status = statusProcess.finished;  
-                        updateChart()
+                        updateChart(processControlBlock)
                         this.updateTable()
                         this.updateTableFinishedProcess()
                         finishedProcesses.push(processControlBlock.shift());   
                     } else {
-                        updateChart()
+                        updateChart(processControlBlock)
                         processControlBlock[0].status = statusProcess.ready;
                         this.updateTable()
                         this.updateTableFinishedProcess()
+                        processControlBlock = rotate(processControlBlock)
                     }
                     
-                    processControlBlock = rotate(processControlBlock)
                     
                 } else {
                     globalTime += processControlBlock[0].remainingTime;
@@ -132,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         processControlBlock[i].waitTime += this.quantum;                    
                     }
 
-                    updateChart()
+                    updateChart(processControlBlock)
                     processControlBlock[0].status = statusProcess.finished;
                 
                     this.updateTable()
@@ -158,38 +157,54 @@ document.addEventListener("DOMContentLoaded", function () {
                 updateGlobalTime();
                 executaScheduler(i + 1);
             }
-        }, 100);
+        }, 1000);
     }
 
     executaScheduler(0);
     
     btnPrinter.addEventListener("click", () => {
-        processControlBlock.push(new Process("Printer", 80 , 0, 0));
+        processControlBlock.push(new Process("Printer", 80 , 0, processControlBlock.length+finishedProcesses.length));
         this.updateTable
     })
 
     btnPhoto.addEventListener("click", () => {
-        processControlBlock.push(new Process("Photo", 30 , 0, 0));
         this.updateTable
+        processControlBlock.push(new Process("Photo", 30 , 0, processControlBlock.length+finishedProcesses.length));
     })
 
     btnGithub.addEventListener("click", () => {
-        processControlBlock.push(new Process("Github", 25 , 0, 0));
+        processControlBlock.push(new Process("Github", 25 , 0, processControlBlock.length+finishedProcesses.length));
         this.updateTable
     })
 
     btnEmail.addEventListener("click", () => {
-        processControlBlock.push(new Process("E-mail", 48 , 0, 0));
+        processControlBlock.push(new Process("E-mail", 48 , 0, processControlBlock.length+finishedProcesses.length));
         this.updateTable
     })
 
     // ===================================================
 
-    function updateChart() {
+    function updateChart(processControlBlock) {
         const ganttChart = document.querySelector('#gantt-chart tr');
         const taskCell = document.createElement('th');
         taskCell.textContent = globalTime;
         ganttChart.appendChild(taskCell);
+        
+        const processosChart = document.querySelector('#gantt-chart tbody')
+        const lastElementId = parseInt(document.querySelector('#gantt-chart tbody').lastElementChild.getAttribute('id'))
+        
+        if(processControlBlock.length + finishedProcesses.length > lastElementId+1){
+            const novoProcesso = document.createElement('tr');
+            novoProcesso.textContent = processControlBlock[processControlBlock.length-1].name
+            novoProcesso.setAttribute("id", lastElementId+1)
+            processosChart.appendChild(novoProcesso)
+            for(let i = 0; i<ganttChart.childElementCount-2; i++){
+                const alinhamento = document.createElement('td');
+                alinhamento.textContent = ' ';
+                alinhamento.style.backgroundColor = '#ffffff';
+                novoProcesso.appendChild(alinhamento);
+            }
+        }
 
         processControlBlock.forEach(process => {
             if(process.status != 'finished') {
