@@ -12,15 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
     //remainingTime = Tempo restante até o término do processo
     //Burst = Tempo total do processo (fixo)
     //ExecutionTime = Quanto tempo já executou
-    function sleep(ms)
-    {
-        return(
-            new Promise(function(resolve, reject)
-            {
-                setTimeout(function() { resolve(); }, ms);
-            })
-        );
-    }
 
 
     const statusProcess = {
@@ -59,6 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
       
     let processSystem = new Process("System", 100 , 0, 0);
     let processHost = new Process("Host", 10, 1, 1);
+    let processHost2 = new Process("Host2", 10, 1, 1);
     let processSecurity = new Process("Security", 15, 2, 2);
     let processRegistry = new Process("Registry", 18, 3, 3);
     
@@ -110,23 +102,27 @@ document.addEventListener("DOMContentLoaded", function () {
                     processControlBlock[0].status = statusProcess.running;
                     processControlBlock[0].executionTime += this.quantum;
                     processControlBlock[0].remainingTime -= this.quantum;
+                    globalTime += this.quantum;
                     for (let i = 1; i < processControlBlock.length; i++) {
                         processControlBlock[i].waitTime += this.quantum;                    
                     }
+                    
                     if (processControlBlock[0].remainingTime == 0) {
-                        sleep(1000).then(updateChart())
+                        
                         processControlBlock[0].status = statusProcess.finished;  
+                        updateChart()
                         this.updateTable()
                         this.updateTableFinishedProcess()
                         finishedProcesses.push(processControlBlock.shift());   
                     } else {
-                        sleep(1000).then(updateChart())
+                        updateChart()
                         processControlBlock[0].status = statusProcess.ready;
+                        this.updateTable()
+                        this.updateTableFinishedProcess()
                     }
-                    globalTime += this.quantum;
-                    this.updateTable()
-                    this.updateTableFinishedProcess()
+                    
                     processControlBlock = rotate(processControlBlock)
+                    
                 } else {
                     globalTime += processControlBlock[0].remainingTime;
                     processControlBlock[0].status = statusProcess.running;
@@ -135,7 +131,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     for (let i = 1; i < processControlBlock.length; i++) {
                         processControlBlock[i].waitTime += this.quantum;                    
                     }
-                    sleep(1000).then(updateChart())
+
+                    updateChart()
                     processControlBlock[0].status = statusProcess.finished;
                 
                     this.updateTable()
@@ -157,11 +154,11 @@ document.addEventListener("DOMContentLoaded", function () {
     function executaScheduler(i) {
         setTimeout(function () {
             scheduler.scaling();
-            if (i < 99) {
-                executaScheduler(i + 1);
+            if (i < 2000) {
                 updateGlobalTime();
+                executaScheduler(i + 1);
             }
-        }, 1000);
+        }, 100);
     }
 
     executaScheduler(0);
@@ -188,7 +185,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ===================================================
 
-    async function updateChart() {
+    function updateChart() {
         const ganttChart = document.querySelector('#gantt-chart tr');
         const taskCell = document.createElement('th');
         taskCell.textContent = globalTime;
