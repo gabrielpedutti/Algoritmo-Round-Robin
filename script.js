@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // ===================================================
 
     function updateChart(processControlBlock, size) {
-        const ganttChart = document.querySelector('#gantt-chart tr');
+        const ganttChart = document.querySelector('#gantt-chart thead tr');
         const taskCell = document.createElement('th');
         taskCell.textContent = globalTime;
         taskCell.setAttribute('width', size*6) // ajuste o número mágico para aumentar ou diminuir a coluna
@@ -212,15 +212,19 @@ document.addEventListener("DOMContentLoaded", function () {
             if(process.status != 'finished') {
                 if(process.status == 'running') {
                     const processTrChart = document.getElementById(`${process.pID}`);
+                    const divCell = document.createElement('div');
                     const taskCell = document.createElement('td');
-                    taskCell.textContent = ' ';
-                    taskCell.style.backgroundColor = '#4bc0c0';
+                    divCell.textContent = ' ';
+                    divCell.style.backgroundColor = '#4bc0c0';
+                    taskCell.appendChild(divCell);
                     processTrChart.appendChild(taskCell);
                 } else {
                     const processTrChart = document.getElementById(`${process.pID}`);
+                    const divCell = document.createElement('div');
                     const taskCell = document.createElement('td');
-                    taskCell.textContent = ' ';
-                    taskCell.style.backgroundColor = '#4bc00';
+                    divCell.textContent = ' ';
+                    divCell.style.backgroundColor = '#4bc0c044';
+                    taskCell.appendChild(divCell);
                     processTrChart.appendChild(taskCell);
                 }
             }
