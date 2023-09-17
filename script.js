@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     
     class Process {
-        constructor(name, burst, arrivalTime, id) {
+        constructor(name, burst, arrivalTime, id, owner) {
             this.name = name;
             this.pID = id;
             this.burst = burst;
@@ -45,13 +45,14 @@ document.addEventListener("DOMContentLoaded", function () {
             this.arrivalTime = arrivalTime;
             this.remainingTime = burst;
             this.startIn = globalTime;
+            this.owner = owner;
         }
     }
       
-    let processSystem = new Process("System", 100 , 0, 0);
-    let processHost = new Process("Host", 10, 1, 1);
-    let processSecurity = new Process("Security", 13, 2, 2);
-    let processRegistry = new Process("Registry", 18, 3, 3);
+    let processSystem = new Process("System", 2000 , 0, 0, "OS");
+    let processHost = new Process("Host", 2000, 1, 1, "OS");
+    let processSecurity = new Process("Security", 2000, 2, 2, "OS");
+    let processRegistry = new Process("Registry", 2000, 3, 3, "OS");
     
     let processControlBlock = [processSystem, processHost, processSecurity, processRegistry];
     let allProcessesNames = [];
@@ -68,15 +69,27 @@ document.addEventListener("DOMContentLoaded", function () {
         updateTable() {
             tableBody.innerHTML = "";
             processControlBlock.forEach(process => {
-                tableBody.innerHTML += `
-                    <tr>
-                        <td>${process.name}</td>
-                        <td>${process.burst}</td>
-                        <td>${process.executionTime}</td>
-                        <td>${process.remainingTime}</td>
-                        <td>${process.waitTime}</td>
-                    </tr>
-                `
+                if(process.owner == "User"){
+                    tableBody.innerHTML += `
+                        <tr>
+                            <td>${process.name}</td>
+                            <td>${process.burst}</td>
+                            <td>${process.executionTime}</td>
+                            <td>${process.remainingTime}</td>
+                            <td>${process.waitTime}</td>
+                        </tr>
+                    `
+                } else {
+                    tableBody.innerHTML += `
+                        <tr>
+                            <td>${process.name}</td>
+                            <td>contínuo</td>
+                            <td>${process.executionTime}</td>
+                            <td>contínuo</td>
+                            <td>${process.waitTime}</td>
+                        </tr>
+                    `  
+                }
             });
         }
 
@@ -95,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
     
-        scaling() {
+        scheduling() {
             if(processControlBlock.length > 0) {
                 if(processControlBlock[0].remainingTime >= this.quantum) {
                     processControlBlock[0].status = statusProcess.running;
@@ -153,8 +166,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function executaScheduler(i) {
         setTimeout(function () {
-            scheduler.scaling();
-            if (i < 2000) {
+            scheduler.scheduling();
+            if (globalTime < 220) {
                 updateGlobalTime();
                 executaScheduler(i + 1);
             }
@@ -164,22 +177,22 @@ document.addEventListener("DOMContentLoaded", function () {
     executaScheduler(0);
     
     btnPrinter.addEventListener("click", () => {
-        processControlBlock.push(new Process("Printer", 80 , 0, processControlBlock.length+finishedProcesses.length));
+        processControlBlock.push(new Process("Printer", 27 , 0, processControlBlock.length+finishedProcesses.length, "User"));
         this.updateTable
     })
 
     btnPhoto.addEventListener("click", () => {
         this.updateTable
-        processControlBlock.push(new Process("Photo", 30 , 0, processControlBlock.length+finishedProcesses.length));
+        processControlBlock.push(new Process("Photo", 10 , 0, processControlBlock.length+finishedProcesses.length, "User"));
     })
 
     btnGithub.addEventListener("click", () => {
-        processControlBlock.push(new Process("Github", 25 , 0, processControlBlock.length+finishedProcesses.length));
+        processControlBlock.push(new Process("Github", 8 , 0, processControlBlock.length+finishedProcesses.length, "User"));
         this.updateTable
     })
 
     btnEmail.addEventListener("click", () => {
-        processControlBlock.push(new Process("E-mail", 48 , 0, processControlBlock.length+finishedProcesses.length));
+        processControlBlock.push(new Process("E-mail", 16 , 0, processControlBlock.length+finishedProcesses.length, "User"));
         this.updateTable
     })
 
