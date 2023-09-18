@@ -132,6 +132,10 @@ td {
     min-width: 40px;
 }
 
+#gantt-chart tbody tr td {
+    text-align: left;
+}
+
 #gantt-chart th:first-child {
     background-color: #fff;
 }
